@@ -26,56 +26,28 @@ class Head(nn.Module):
     def forward(self, x):
         return self.conv5x5(x)
 
-class SPP(nn.Module):
-    def __init__(self, input_channels, output_channels):
-        super(SPP, self).__init__()
-        self.Conv1x1 = Conv1x1(input_channels, output_channels)
+ class SPPFCSPC(nn.Module):
+    def __init__(self, c1, c2, n=1, shortcut=False, g=1, e=0.5, k=5):
+        super(SPPFCSPC, self).__init__()
+        c_ = int(2 * c2 * e)  # hidden channels
+        self.cv1 = Conv(c1, c_, 1, 1)
+        self.cv2 = Conv(c1, c_, 1, 1)
+        self.cv3 = Conv(c_, c_, 3, 1)
+        self.cv4 = Conv(c_, c_, 1, 1)
+        self.m = nn.MaxPool2d(kernel_size=k, stride=1, padding=k // 2)
+        self.cv5 = Conv(4 * c_, c_, 1, 1)
+        self.cv6 = Conv(c_, c_, 3, 1)
+        self.cv7 = Conv(2 * c_, c2, 1, 1)
 
-        self.S1 =  nn.Sequential(nn.Conv2d(output_channels, output_channels, 5, 1, 2, groups = output_channels, bias = False),
-                                 nn.BatchNorm2d(output_channels),
-                                 nn.ReLU(inplace=True)
-                                 )
-
-        self.S2 =  nn.Sequential(nn.Conv2d(output_channels, output_channels, 5, 1, 2, groups = output_channels, bias = False),
-                                 nn.BatchNorm2d(output_channels),
-                                 nn.ReLU(inplace=True),
-
-                                 nn.Conv2d(output_channels, output_channels, 5, 1, 2, groups = output_channels, bias = False),
-                                 nn.BatchNorm2d(output_channels),
-                                 nn.ReLU(inplace=True)
-                                 )
-
-        self.S3 =  nn.Sequential(nn.Conv2d(output_channels, output_channels, 5, 1, 2, groups = output_channels, bias = False),
-                                 nn.BatchNorm2d(output_channels),
-                                 nn.ReLU(inplace=True),
-
-                                 nn.Conv2d(output_channels, output_channels, 5, 1, 2, groups = output_channels, bias = False),
-                                 nn.BatchNorm2d(output_channels),
-                                 nn.ReLU(inplace=True),
-
-                                 nn.Conv2d(output_channels, output_channels, 5, 1, 2, groups = output_channels, bias = False),
-                                 nn.BatchNorm2d(output_channels),
-                                 nn.ReLU(inplace=True)
-                                 )
-
-        self.output = nn.Sequential(nn.Conv2d(output_channels * 3, output_channels, 1, 1, 0, bias = False),
-                                    nn.BatchNorm2d(output_channels),
-                                   )
-                                   
-        self.relu = nn.ReLU(inplace=True)
-
-    def forward(self, x):    
-        x = self.Conv1x1(x)
-
-        y1 = self.S1(x)
-        y2 = self.S2(x)
-        y3 = self.S3(x)
-
-        y = torch.cat((y1, y2, y3), dim=1)
-        y = self.relu(x + self.output(y))
-
-        return y
-
+    def forward(self, x):
+        x1 = self.cv4(self.cv3(self.cv1(x)))
+        x2 = self.m(x1)
+        x3 = self.m(x2)
+        y1 = self.cv6(self.cv5(torch.cat((x1,x2,x3, self.m(x3)),1)))
+        y2 = self.cv2(x)
+        return self.cv7(torch.cat((y1, y2), dim=1))
+   
+ 
 class DetectHead(nn.Module):
     def __init__(self, input_channels, category_num):
         super(DetectHead, self).__init__()
