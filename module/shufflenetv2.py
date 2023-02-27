@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 
+# 添加自定义层space_to_depth
 class ShuffleV2Block(nn.Module):
     def __init__(self, inp, oup, mid_channels, *, ksize, stride):
         super(ShuffleV2Block, self).__init__()
@@ -44,13 +45,17 @@ class ShuffleV2Block(nn.Module):
         else:
             self.branch_proj = None
 
+        self.space_to_depth = space_to_depth()
+
     def forward(self, old_x):
         if self.stride==1:
             x_proj, x = self.channel_shuffle(old_x)
+            x = self.space_to_depth(x)
             return torch.cat((x_proj, self.branch_main(x)), 1)
         elif self.stride==2:
             x_proj = old_x
             x = old_x
+            x = self.space_to_depth(x)
             return torch.cat((self.branch_proj(x_proj), self.branch_main(x)), 1)
 
     def channel_shuffle(self, x):
@@ -70,8 +75,11 @@ class ShuffleNetV2(nn.Module):
 
         # building first layer
         input_channel = self.stage_out_channels[1]
+        
+        # 添加自定义层space_to_depth
         self.first_conv = nn.Sequential(
-            nn.Conv2d(3, input_channel, 3, 2, 1, bias=False),
+            space_to_depth(),
+            nn.Conv2d(12, input_channel, 3, 2, 1, bias=False),
             nn.BatchNorm2d(input_channel),
             nn.ReLU(inplace=True),
         )
