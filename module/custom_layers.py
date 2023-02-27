@@ -6,7 +6,7 @@ class Conv1x1(nn.Module):
         super(Conv1x1, self).__init__()
         self.conv1x1 =  nn.Sequential(nn.Conv2d(input_channels, output_channels, 1, stride=1, padding=0, bias=False),
                                       nn.BatchNorm2d(output_channels),
-                                      nn.ReLU(inplace=True)
+                                      MetaAconC(output_channels),
                                      )
     
     def forward(self, x):
@@ -17,7 +17,7 @@ class Head(nn.Module):
         super(Head, self).__init__()
         self.conv5x5 = nn.Sequential(nn.Conv2d(input_channels, input_channels, 5, 1, 2, groups = input_channels, bias = False),
                                      nn.BatchNorm2d(input_channels),
-                                     nn.ReLU(inplace=True),
+                                     MetaAconC(input_channels),
 
                                      nn.Conv2d(input_channels, output_channels, 1, stride=1, padding=0, bias=False),
                                      nn.BatchNorm2d(output_channels)
