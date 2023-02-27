@@ -3,7 +3,7 @@ import torch.nn as nn
 
 from .custom_layers import SPD
 
-# 添加自定义层
+# 添加自定义层space_to_depth
 class ShuffleV2Block(nn.Module):
     def __init__(self, inp, oup, mid_channels, *, ksize, stride):
         super(ShuffleV2Block, self).__init__()
