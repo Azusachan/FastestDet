@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-from .custom_layers import SPD
+from .custom_layers import SPD , MetaAconC
 
 # 添加自定义层space_to_depth
 class ShuffleV2Block(nn.Module):
@@ -22,14 +22,14 @@ class ShuffleV2Block(nn.Module):
             # pw
             nn.Conv2d(inp, mid_channels, 1, 1, 0, bias=False),
             nn.BatchNorm2d(mid_channels),
-            nn.ReLU(inplace=True),
+            MetaAconC(mid_channels),
             # dw
             nn.Conv2d(mid_channels, mid_channels, ksize, stride, pad, groups=mid_channels, bias=False),
             nn.BatchNorm2d(mid_channels),
             # pw-linear
             nn.Conv2d(mid_channels, outputs, 1, 1, 0, bias=False),
             nn.BatchNorm2d(outputs),
-            nn.ReLU(inplace=True),
+            MetaAconC(outputs),
         ]
         self.branch_main = nn.Sequential(*branch_main)
 
@@ -41,7 +41,7 @@ class ShuffleV2Block(nn.Module):
                 # pw-linear
                 nn.Conv2d(inp, inp, 1, 1, 0, bias=False),
                 nn.BatchNorm2d(inp),
-                nn.ReLU(inplace=True),
+                MetaAconC(inp),
             ]
             self.branch_proj = nn.Sequential(*branch_proj)
         else:
@@ -83,7 +83,7 @@ class ShuffleNetV2(nn.Module):
             SPD(),
             nn.Conv2d(12, input_channel, 3, 2, 1, bias=False),
             nn.BatchNorm2d(input_channel),
-            nn.ReLU(inplace=True),
+            MetaAconC(input_channel),
         )
 
         self.maxpool = nn.MaxPool2d(kernel_size=3, stride=2, padding=1)
