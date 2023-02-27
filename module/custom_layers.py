@@ -26,7 +26,7 @@ class Head(nn.Module):
     def forward(self, x):
         return self.conv5x5(x)
 
- class SPPFCSPC(nn.Module):
+class SPPFCSPC(nn.Module):
     def __init__(self, c1, c2, n=1, shortcut=False, g=1, e=0.5, k=5):
         super(SPPFCSPC, self).__init__()
         c_ = int(2 * c2 * e)  # hidden channels
