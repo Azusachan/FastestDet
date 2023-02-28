@@ -29,6 +29,7 @@ class Head(nn.Module):
 class SPPFCSPC(nn.Module):
     def __init__(self, input_channels, output_channels, n=1, shortcut=False, g=1, e=0.5, k=5):
         super(SPPFCSPC, self).__init__()
+        self.Conv1x1 = Conv1x1(input_channels, output_channels)
         c_ = int(2 * output_channels * e)  # hidden channels
         self.cv1 = nn.Conv2d(input_channels, c_, 1, 1)
         self.cv2 = nn.Conv2d(input_channels, c_, 1, 1)
