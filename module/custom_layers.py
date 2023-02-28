@@ -27,17 +27,17 @@ class Head(nn.Module):
         return self.conv5x5(x)
 
 class SPPFCSPC(nn.Module):
-    def __init__(self, c1, c2, n=1, shortcut=False, g=1, e=0.5, k=5):
+    def __init__(self, c_in, c_out, n=1, shortcut=False, g=1, e=0.5, k=5):
         super(SPPFCSPC, self).__init__()
-        c_ = int(2 * c2 * e)  # hidden channels
-        self.cv1 = nn.Conv2d(c1, c_, 1, 1)
-        self.cv2 = nn.Conv2d(c1, c_, 1, 1)
+        c_ = int(2 * c_out * e)  # hidden channels
+        self.cv1 = nn.Conv2d(c_in, c_, 1, 1)
+        self.cv2 = nn.Conv2d(c_in, c_, 1, 1)
         self.cv3 = nn.Conv2d(c_, c_, 3, 1)
         self.cv4 = nn.Conv2d(c_, c_, 1, 1)
         self.m = nn.MaxPool2d(kernel_size=k, stride=1, padding=k // 2)
         self.cv5 = nn.Conv2d(4 * c_, c_, 1, 1)
         self.cv6 = nn.Conv2d(c_, c_, 3, 1)
-        self.cv7 = nn.Conv2d(2 * c_, c2, 1, 1)
+        self.cv7 = nn.Conv2d(2 * c_, c_out, 1, 1)
 
     def forward(self, x):
         x1 = self.cv4(self.cv3(self.cv1(x)))
