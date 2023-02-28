@@ -37,7 +37,7 @@ class SPPFCSPC(nn.Module):
         self.m = nn.MaxPool2d(kernel_size=k, stride=1, padding=k // 2)
         self.cv5 = nn.Conv2d(4 * c_, c_, 1, 1)
         self.cv6 = nn.Conv2d(c_, c_, 3, 1)
-        self.cv7 = nn.Conv2d(2 * c_, input_channels, output_channels, 1, 1)
+        self.cv7 = nn.Conv2d(2 * c_, output_channels, 1, 1)
 
     def forward(self, x):
         x1 = self.cv4(self.cv3(self.cv1(x)))
