@@ -1,38 +1,3 @@
-***2022.7.14:Optimize loss, adopt IOU aware based on smooth L1, and the AP is significantly increased by 0.7***
-# :zap:FastestDet:zap:
-[![DOI](https://zenodo.org/badge/508635170.svg)](https://zenodo.org/badge/latestdoi/508635170)
-![image](https://img.shields.io/github/license/dog-qiuqiu/FastestDet)
-![image](https://img.shields.io/github/stars/dog-qiuqiu/FastestDet?style=flat)
-![image](https://github.com/dog-qiuqiu/FastestDet/blob/main/data/data.png)
-* ***Faster! Stronger! Simpler!***
-* ***It has better performance and simpler feature map post-processing than Yolo-fastest***
-* ***The performance is 10% higher than Yolo-fastest***
-* ***The coco evaluation index increased by 1.2% compared with the map0.5 of Yolo-fastestv2***
-* ***算法介绍：https://zhuanlan.zhihu.com/p/536500269 交流qq群:1062122604***
-# Evaluating indicator/Benchmark
-Network|mAPval 0.5|mAPval 0.5:0.95|Resolution|Run Time(4xCore)|Run Time(1xCore)|Params(M)
-:---:|:---:|:---:|:---:|:---:|:---:|:---:
-[yolov5s](https://github.com/ultralytics/yolov5)|56.8%|37.4%|640X640|395.31ms|1139.16ms|7.2M
-[yolov6n](https://github.com/meituan/YOLOv6)|-|30.8%|416X416|109.24ms|445.44ms|4.3M
-[yolox-nano](https://github.com/Megvii-BaseDetection/YOLOX)|-|25.8%|416X416|76.31ms|191.16ms|0.91M
-[nanodet_m](https://github.com/RangiLyu/nanodet)|-|20.6%|320X320|49.24ms|160.35ms|0.95M
-[yolo-fastestv1.1](https://github.com/dog-qiuqiu/Yolo-Fastest/tree/master/ModelZoo/yolo-fastest-1.1_coco)|24.40%|-|320X320|26.60ms|75.74ms|0.35M
-[yolo-fastestv2](https://github.com/dog-qiuqiu/Yolo-FastestV2/tree/main/modelzoo)|24.10%|-|352X352|23.8ms|68.9ms|0.25M
-FastestDet|25.3%|13.0%|352X352|23.51ms|70.62ms|0.24M
-* ***Test platform Radxa Rock3A RK3568 ARM Cortex-A55 CPU，Based on [NCNN](https://github.com/Tencent/ncnn)***
-* ***CPU lock frequency 2.0GHz***
-# Improvement
-* Anchor-Free
-* Single scale detector head
-* Cross grid multiple candidate targets
-* Dynamic positive and negative sample allocation
-# Multi-platform benchmark
-Equipment|Computing backend|System|Framework|Run time(Single core)|Run time(Multi core)
-:---:|:---:|:---:|:---:|:---:|:---:
-Radxa rock3a|RK3568(arm-cpu)|Linux(aarch64)|ncnn|70.62ms|23.51ms
-Radxa rock3a|RK3568(NPU)|Linux(aarch64)|rknn|28ms|-
-Qualcomm|Snapdragon 835(arm-cpu)|Android(aarch64)|ncnn|32.34ms|16.24ms
-Intel|i7-8700(X86-cpu)|Linux(amd64)|ncnn|4.51ms|4.33ms
 # How to use
 ## Dependent installation
 * PiP(Note pytorch CUDA version selection)
