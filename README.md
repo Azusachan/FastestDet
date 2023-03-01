@@ -7,7 +7,7 @@
 ## Test
 * Picture test
   ```
-  python3 test.py --yaml configs/coco.yaml --weight weights/weight_AP05:0.253207_280-epoch.pth --img data/3.jpg
+  python test.py --yaml configs/coco.yaml --weight weights/weight_AP05:0.253207_280-epoch.pth --img data/3.jpg
   ```
 <div align=center>
 <img src="https://github.com/dog-qiuqiu/FastestDet/blob/main/result.png"> />
@@ -94,8 +94,8 @@
     NAMES: "dataset/coco128/coco.names"                   # .names category label file
   MODEL:
     NC: 80                                                # Number of detection categories
-    INPUT_WIDTH: 352                                      # The width of the model input image
-    INPUT_HEIGHT: 352                                     # The height of the model input image
+    INPUT_WIDTH: 416                                      # The width of the model input image
+    INPUT_HEIGHT: 416                                     # The height of the model input image
   TRAIN:
     LR: 0.001                                             # Train learn rate
     THRESH: 0.25                                          # ？？？？
@@ -110,12 +110,12 @@
 ### Train
 * Perform training tasks
   ```
-  python3 train.py --yaml configs/coco.yaml
+  python train.py --yaml configs/coco.yaml
   ```
 ### Evaluation
 * Calculate map evaluation
   ```
-  python3 eval.py --yaml configs/coco.yaml --weight weights/weight_AP05:0.253207_280-epoch.pth
+  python eval.py --yaml configs/coco.yaml --weight weights/weight_AP05:0.253207_280-epoch.pth
   ```
 * COCO2017 evaluation
   ```
@@ -146,12 +146,12 @@
 ## Export onnx
 * You can export .onnx by adding the --onnx option when executing test.py
   ```
-  python3 test.py --yaml configs/coco.yaml --weight weights/weight_AP05:0.253207_280-epoch.pth --img data/3.jpg --onnx
+  python test.py --yaml configs/coco.yaml --weight weights/weight_AP05:0.253207_280-epoch.pth --img data/3.jpg --onnx
   ```
 ## Export torchscript
 * You can export .pt by adding the --torchscript option when executing test.py
   ```
-  python3 test.py --yaml configs/coco.yaml --weight weights/weight_AP05:0.253207_280-epoch.pth --img data/3.jpg --torchscript
+  python test.py --yaml configs/coco.yaml --weight weights/weight_AP05:0.253207_280-epoch.pth --img data/3.jpg --torchscript
   ```
 ## NCNN
 * Need to compile ncnn and opencv in advance and modify the path in build.sh
@@ -165,7 +165,7 @@
   ```
   cd example/onnx-runtime
   pip install onnx-runtime
-  python3 runtime.py
+  python runtime.py
   ```
 # Citation
 * If you find this project useful in your research, please consider cite:
