@@ -77,6 +77,11 @@ class SPD(nn.Module):
 
     def forward(self, x):
         c = x.size(1)
+        
+        print(x.shape)
+        print(x.size())
+        print(x.ndim)
+        
         return torch.cat([x[..., ::2, ::2], x[..., 1::2, ::2], x[..., ::2, 1::2], x[..., 1::2, 1::2]], 1)[:,:4*c,:,:]
 
         
