@@ -45,6 +45,8 @@ class SPPFCSPC(nn.Module):
         x3 = self.m(x2)
         y1 = self.cv6(self.cv5(torch.cat((x1,x2,x3, self.m(x3)),1)))
         y2 = self.cv2(x)
+        y2 = y2[:, :, :18, :18]  # TODO: fix this
+
         return self.cv7(torch.cat((y1, y2), dim=1))
    
  
